@@ -1,0 +1,15 @@
+# Netlify Redirects for All Pro Irrigation
+
+# Force HTTPS
+http://allproirrigationinc.netlify.app/* https://allproirrigationinc.netlify.app/:splat 301!
+http://www.allproirrigationinc.netlify.app/* https://allproirrigationinc.netlify.app/:splat 301!
+
+# Redirect old domain (when ready)
+# http://allproirrigationinc.com/* https://allproirrigationinc.netlify.app/:splat 301!
+# http://www.allproirrigationinc.com/* https://allproirrigationinc.netlify.app/:splat 301!
+
+# Handle form submissions
+/thank-you /thank-you.html 200
+
+# 404 fallback
+/* /index.html 404

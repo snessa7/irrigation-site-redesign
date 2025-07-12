@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://allproirrigationinc.netlify.app/sitemap.xml
+
+# Block unnecessary paths
+Disallow: /assets/screenshots/
+Disallow: /_headers
+Disallow: /_redirects
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/

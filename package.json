@@ -1,0 +1,57 @@
+{
+  "name": "all-pro-irrigation-website",
+  "version": "1.0.0",
+  "description": "Professional website for All Pro Irrigation Inc. - Clayton & Wilmington, NC",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -o",
+    "dev": "npx http-server -p 3000 -o -c-1",
+    "build": "npm run optimize:css && npm run optimize:js && npm run optimize:images",
+    "optimize:css": "npx postcss styles.css --use autoprefixer --use cssnano -o dist/styles.min.css",
+    "optimize:js": "npx terser script.js -o dist/script.min.js --compress --mangle",
+    "optimize:images": "npx imagemin assets/images/*.{jpg,jpeg,png} --out-dir=dist/images --plugin=webp",
+    "validate:html": "npx html-validate index.html",
+    "lint:css": "npx stylelint styles.css",
+    "audit:lighthouse": "npx lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html",
+    "audit:accessibility": "npx axe-core http://localhost:3000",
+    "test": "npm run validate:html && npm run lint:css",
+    "deploy:build": "mkdir -p dist && cp index.html dist/ && npm run optimize:css && npm run optimize:js && npm run optimize:images",
+    "serve:dist": "npx http-server dist -p 3001 -o"
+  },
+  "keywords": [
+    "irrigation",
+    "landscape-lighting",
+    "clayton-nc",
+    "wilmington-nc",
+    "sprinkler-systems",
+    "backflow-testing",
+    "drainage-solutions"
+  ],
+  "author": "Seth Paonessa (for All Pro Irrigation Inc.)",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "axe-core": "^4.8.2",
+    "cssnano": "^6.0.1",
+    "html-validate": "^8.7.2",
+    "http-server": "^14.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^7.0.0",
+    "lighthouse": "^11.4.0",
+    "postcss": "^8.4.32",
+    "postcss-cli": "^11.0.0",
+    "stylelint": "^16.0.2",
+    "stylelint-config-standard": "^36.0.0",
+    "terser": "^5.26.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

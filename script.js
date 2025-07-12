@@ -44,29 +44,140 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Form submission handling
+    // Enhanced form validation and submission
     const quoteForm = document.querySelector('.quote-form');
     if (quoteForm) {
+        const formFields = {
+            name: document.getElementById('name'),
+            email: document.getElementById('email'),
+            phone: document.getElementById('phone'),
+            service: document.getElementById('service'),
+            message: document.getElementById('message')
+        };
+
+        // Real-time validation
+        Object.keys(formFields).forEach(fieldName => {
+            const field = formFields[fieldName];
+            if (field) {
+                field.addEventListener('blur', () => validateField(fieldName, field));
+                field.addEventListener('input', () => clearError(fieldName));
+            }
+        });
+
         quoteForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(this);
-            const formObject = {};
-            formData.forEach((value, key) => {
-                formObject[key] = value;
-            });
-
-            // Basic validation
-            if (!formObject.name || !formObject.email || !formObject.service) {
-                alert('Please fill in all required fields.');
-                return;
+            let isValid = true;
+            
+            // Validate all required fields
+            isValid = validateField('name', formFields.name) && isValid;
+            isValid = validateField('email', formFields.email) && isValid;
+            isValid = validateField('service', formFields.service) && isValid;
+            
+            // Validate phone if provided
+            if (formFields.phone.value.trim()) {
+                isValid = validateField('phone', formFields.phone) && isValid;
             }
 
-            // Simulate form submission (replace with actual form handling)
-            alert('Thank you for your quote request! We\'ll contact you within 24 hours.');
-            this.reset();
+            if (isValid) {
+                // Show loading state
+                const submitBtn = this.querySelector('.form-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+
+                // Submit via Netlify (form will handle the actual submission)
+                this.submit();
+            } else {
+                // Show error message
+                showFormMessage('Please correct the errors above.', 'error');
+            }
         });
+    }
+
+    // Form validation functions
+    function validateField(fieldName, field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+
+        switch(fieldName) {
+            case 'name':
+                if (!value) {
+                    errorMessage = 'Name is required';
+                    isValid = false;
+                } else if (value.length < 2) {
+                    errorMessage = 'Name must be at least 2 characters';
+                    isValid = false;
+                }
+                break;
+            
+            case 'email':
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!value) {
+                    errorMessage = 'Email is required';
+                    isValid = false;
+                } else if (!emailRegex.test(value)) {
+                    errorMessage = 'Please enter a valid email address';
+                    isValid = false;
+                }
+                break;
+            
+            case 'phone':
+                if (value) {
+                    const phoneRegex = /^[\d\s\(\)\-\+\.]{10,}$/;
+                    if (!phoneRegex.test(value.replace(/\s/g, ''))) {
+                        errorMessage = 'Please enter a valid phone number';
+                        isValid = false;
+                    }
+                }
+                break;
+            
+            case 'service':
+                if (!value) {
+                    errorMessage = 'Please select a service';
+                    isValid = false;
+                }
+                break;
+        }
+
+        const errorElement = document.getElementById(`${fieldName}-error`);
+        if (errorElement) {
+            errorElement.textContent = errorMessage;
+            errorElement.style.display = errorMessage ? 'block' : 'none';
+        }
+
+        field.classList.toggle('error', !isValid);
+        return isValid;
+    }
+
+    function clearError(fieldName) {
+        const errorElement = document.getElementById(`${fieldName}-error`);
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
+        const field = document.getElementById(fieldName);
+        if (field) {
+            field.classList.remove('error');
+        }
+    }
+
+    function showFormMessage(message, type) {
+        const existingMessage = document.querySelector('.form-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `form-message ${type}`;
+        messageEl.textContent = message;
+        
+        const form = document.querySelector('.quote-form');
+        form.insertBefore(messageEl, form.firstChild);
+
+        setTimeout(() => {
+            messageEl.remove();
+        }, 5000);
     }
 
     // Header scroll effect
