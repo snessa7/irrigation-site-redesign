@@ -15,7 +15,7 @@
     "audit:lighthouse": "npx lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html",
     "audit:accessibility": "npx axe-core http://localhost:3000",
     "test": "npm run validate:html && npm run lint:css",
-    "deploy:build": "mkdir -p dist && cp index.html dist/ && cp -r assets dist/ && npm run optimize:css && npm run optimize:js",
+    "deploy:build": "mkdir -p dist && cp index.html styles.css script.js dist/ && cp -r assets dist/",
     "serve:dist": "npx http-server dist -p 3001 -o"
   },
   "keywords": [
