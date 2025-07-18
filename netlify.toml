@@ -1,6 +1,7 @@
 [build]
+  # Skip build - this is a static site
+  command = "echo 'Skipping build - static site'"
   publish = "."
-  command = ""
 
 [build.environment]
   NODE_VERSION = "18"
